@@ -17,7 +17,7 @@ function TopDaysChart() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/statistics/top-days')
+    axios.get('https://traffic-backend-6wxr.onrender.com/statistics/top-days')
       .then(res => setData(res.data))
       .catch(err => console.error("❌ Hiba a top napok lekérésénél:", err));
   }, []);

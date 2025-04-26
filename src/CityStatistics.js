@@ -33,7 +33,7 @@ function CityStatistics() {
 
   const fetchStats = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/statistics/city-count', {
+      const response = await axios.get('https://traffic-backend-6wxr.onrender.com/statistics/city-count', {
         params: {
           from: fromDate,
           to: toDate,

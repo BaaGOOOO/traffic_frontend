@@ -18,7 +18,7 @@ function WeatherImpactChart() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/statistics/weather-impact')
+    axios.get('https://traffic-backend-6wxr.onrender.com/statistics/weather-impact')
       .then(res => setData(res.data))
       .catch(err => console.error("❌ Hiba az időjárásos statisztika lekérésekor:", err));
   }, []);

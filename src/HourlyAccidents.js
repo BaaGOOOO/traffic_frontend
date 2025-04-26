@@ -17,7 +17,7 @@ function HourlyAccidents() {
   const [stats, setStats] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/statistics/by-hour')
+    axios.get('https://traffic-backend-6wxr.onrender.com/statistics/by-hour')
       .then(res => setStats(res.data))
       .catch(err => console.error('Hiba a statisztika lekérésekor:', err));
   }, []);

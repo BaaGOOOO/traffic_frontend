@@ -49,7 +49,7 @@ function StatisticsPage() {
         return;
       }
   
-      const response = await axios.get('http://localhost:5000/statistics/filtered', {
+      const response = await axios.get('https://traffic-backend-6wxr.onrender.com/statistics/filtered', {
         params: {
           types: selectedTypes.join(','), // pl. "Borulás,Ütközés"
         }

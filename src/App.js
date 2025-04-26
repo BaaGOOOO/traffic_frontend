@@ -114,13 +114,13 @@ function MainPage() {
   const [cities, setCities] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/cities')
+    axios.get('https://traffic-backend-6wxr.onrender.com/cities')
       .then(response => setCities(response.data))
       .catch(error => console.error("Hiba a városok lekérésekor:", error));
   }, []);
 
   const fetchAccidents = () => {
-    axios.get('http://localhost:5000/accidents', {
+    axios.get('https://traffic-backend-6wxr.onrender.com/accidents', {
       params: { date: selectedDate, accident_type: selectedType, city: selectedCity }
     })
       .then(response => {

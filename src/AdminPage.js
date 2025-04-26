@@ -11,7 +11,7 @@ function AdminPage() {
 
   // Felhasználók lekérése
   const fetchUsers = useCallback(() => {
-    axios.get('http://localhost:5000/api/admin/data', {
+    axios.get('https://traffic-backend-6wxr.onrender.com/api/admin/data', {
       headers: { Authorization: `Bearer ${token}` }
     })
     .then(res => setUsers(res.data))
@@ -27,21 +27,21 @@ function AdminPage() {
 
   // Felhasználó törlésére szolgáló függvény
   const handleDelete = (userId) => {
-    axios.delete(`http://localhost:5000/api/admin/user/${userId}`, {
+    axios.delete(`https://traffic-backend-6wxr.onrender.com/api/admin/user/${userId}`, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(() => fetchUsers());
   };
 
   // Felhasználó szerepének módosítása
   const handleRoleChange = (userId, newRole) => {
-    axios.patch(`http://localhost:5000/api/admin/user/${userId}/role`, { role: newRole }, {
+    axios.patch(`https://traffic-backend-6wxr.onrender.com/api/admin/user/${userId}/role`, { role: newRole }, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(() => fetchUsers());
   };
 
   // Új felhasználó hozzáadása
   const handleAddUser = () => {
-    axios.post('http://localhost:5000/api/admin/user', newUser, {
+    axios.post('https://traffic-backend-6wxr.onrender.com/api/admin/user', newUser, {
       headers: { Authorization: `Bearer ${token}` }
     }).then(() => {
       setNewUser({ name: '', email: '', password: '', role: 'user' });
