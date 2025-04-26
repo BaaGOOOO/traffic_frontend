@@ -19,13 +19,13 @@ function AddAccident() {
       .catch(err => console.error('❌ Hiba az időjárás lekérésénél:', err));
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!location || !city || !date || !time || !accidentType || !weatherId) {
       setError('❌ Minden mező kitöltése kötelező!');
       setSuccess('');
       return;
     }
-
+  
     const accident = {
       location,
       city,
@@ -34,23 +34,33 @@ function AddAccident() {
       accident_type: accidentType,
       weather_id: weatherId
     };
-
-    axios.post('https://traffic-backend-6wxr.onrender.com/api/accidents/add', accident)
-      .then(() => {
-        setSuccess('✅ A baleset sikeresen rögzítve lett!');
-        setError('');
-        setLocation('');
-        setCity('');
-        setDate('');
-        setTime('');
-        setAccidentType('Ütközés');
-        setWeatherId('');
-      })
-      .catch(() => {
-        setError('❌ Hiba a rögzítés során.');
-        setSuccess('');
-      });
+  
+    try {
+      await axios.post('https://traffic-backend-6wxr.onrender.com/api/accidents/add', accident);
+  
+      // 🔥 ÚJ: Frissítse az újonnan felvitt baleset koordinátáját
+      await axios.get('https://traffic-backend-6wxr.onrender.com/update-coordinates');
+  
+      setSuccess('✅ A baleset sikeresen rögzítve lett!');
+      setError('');
+      setLocation('');
+      setCity('');
+      setDate('');
+      setTime('');
+      setAccidentType('Ütközés');
+      setWeatherId('');
+  
+      // Esemény a térkép frissítéséhez
+      window.dispatchEvent(new Event('accident-added'));
+  
+    } catch (error) {
+      console.error(error);
+      setError('❌ Hiba a rögzítés során.');
+      setSuccess('');
+    }
   };
+  
+  
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', marginTop: '50px' }}>
