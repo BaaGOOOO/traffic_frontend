@@ -21,7 +21,7 @@ const Map = ({ accidents }) => {
         const initializeMap = () => {
             const mapInstance = new window.google.maps.Map(document.getElementById("map"), {
                 zoom: 7,
-                center: { lat: 47.4979, lng: 19.0402 },
+                center: { lat: 47.4979, lng: 19.0402 }, // Budapest középen
             });
             setMap(mapInstance);
             setGeocoder(new window.google.maps.Geocoder());
@@ -35,11 +35,14 @@ const Map = ({ accidents }) => {
     useEffect(() => {
         if (!map || !geocoder) return;
 
+        // 🔹 Régi markerek eltávolítása
         markersRef.current.forEach(marker => marker.setMap(null));
         markersRef.current = [];
 
+        // 🔹 Új markerek hozzáadása
         accidents.forEach(accident => {
             if (accident.latitude && accident.longitude) {
+                // 🔹 Van koordináta -> direkt marker
                 const marker = new window.google.maps.Marker({
                     map: map,
                     position: {
@@ -66,7 +69,37 @@ const Map = ({ accidents }) => {
 
                 markersRef.current.push(marker);
             } else {
-                console.error("Hiba: Nincs koordináta a következő balesethez:", accident);
+                // 🔹 Nincs koordináta -> geocoder-rel lekérjük
+                const address = `${accident.location}, ${accident.city}, Hungary`;
+
+                geocoder.geocode({ address: address }, (results, status) => {
+                    if (status === "OK" && results[0]) {
+                        const marker = new window.google.maps.Marker({
+                            map: map,
+                            position: results[0].geometry.location,
+                            title: accident.accident_type,
+                            icon: getMarkerIcon(accident.accident_type),
+                        });
+
+                        const infoWindow = new window.google.maps.InfoWindow({
+                            content: `
+                                <div>
+                                    <h3>${accident.accident_type}</h3>
+                                    <p><strong>Helyszín:</strong> ${accident.location}, ${accident.city}</p>
+                                    <p><strong>Dátum:</strong> ${new Date(accident.date).toLocaleDateString()}</p>
+                                </div>
+                            `,
+                        });
+
+                        marker.addListener("click", () => {
+                            infoWindow.open(map, marker);
+                        });
+
+                        markersRef.current.push(marker);
+                    } else {
+                        console.error("❌ Geokódolási hiba:", status, "Cím:", address);
+                    }
+                });
             }
         });
 
