@@ -14,7 +14,7 @@ function AddAccident() {
   const [success, setSuccess] = useState('');
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/weather-types')
+    axios.get('https://traffic-backend-6wxr.onrender.com/api/weather-types')
       .then(res => setWeatherTypes(res.data))
       .catch(err => console.error('❌ Hiba az időjárás lekérésénél:', err));
   }, []);
@@ -35,7 +35,7 @@ function AddAccident() {
       weather_id: weatherId
     };
 
-    axios.post('http://localhost:5000/api/accidents/add', accident)
+    axios.post('https://traffic-backend-6wxr.onrender.com/api/accidents/add', accident)
       .then(() => {
         setSuccess('✅ A baleset sikeresen rögzítve lett!');
         setError('');
